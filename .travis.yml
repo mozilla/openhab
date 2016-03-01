@@ -4,7 +4,7 @@ branches:
     - master
 
 language: java
-before_install: echo "MAVEN_OPTS='-e'" > $HOME/.mavenrc
+install: mvn -e install -DskipTests=true -Dmaven.javadoc.skip=true -B -V 
 
 jdk:
   - oraclejdk8
