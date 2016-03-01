@@ -4,7 +4,7 @@ branches:
     - master
 
 language: java
-install: mvn -X install -DskipTests=true -Dmaven.javadoc.skip=true -B -V 
+install: mvn -e install -DskipTests=true -Dmaven.javadoc.skip=true -B -V 
 
 jdk:
   - oraclejdk8
