@@ -4,6 +4,7 @@ branches:
     - master
 
 language: java
+before_install: echo "MAVEN_OPTS='-e'" > $HOME/.mavenrc
 
 jdk:
   - oraclejdk8
