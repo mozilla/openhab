@@ -1,10 +1,13 @@
-# openHAB travis.yml
 branches:
   only:
-    - master
-
+  - master
 language: java
-install: mvn -e install -DskipTests=true -Dmaven.javadoc.skip=true -B -V 
-
+install: mvn -e install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 jdk:
-  - oraclejdk8
+- oraclejdk8
+deploy:
+  provider: bintray
+  file: descriptor.json
+  user: vaani
+  key:
+    secure: Rc/w23OFHv4tlbhjGwFBC3siSiIbOm2P257/5DQIDrCdtuAh9NY3EoyzkBgymFDKrI4RluPEqASKr/dVGMX+PL52T3tvYUopr3HUI4LcfAAtixMKxARaHqZV7vh7PIV//v6xGKxsgogE21PAw481laIvcP7g5qnFWLi/fwzSMeE25E6c42lwpOIGZ1g1VyM7DYyOgJPoyCSsZQhlLnKIhrPJ49yIHKX6C8QqZy+JA7rFmMIhDJtcBuNkq7MqCw8JTkIA1Av76jkjvb74JWW9/sZ0c7WS8ckCX1c2EVOHae2W6ke70StSChlJobZRvR1LRrIMCDrwLtdyrtcZejfCliDA0ASQPtUEchpoNGHAzJkxFEsgl/7+OcigrR24QCtkkFCZUdnlJ0yh0bFyF63k3QHjJ2Nk0tfX4jN/azveNvYiA23ldR8Eh3WJRrjqKTbGi2qeL3RsmJkYLqo1rTRGe5I7HukYU5okYD440wlT7QnSLCIMuk8mB24XCdM8LSXMKbZwMdrykJxV5lRvt4jb59Ncy4Oeu4fuyfcaNVEPpIKgPrPDUrEF8dbCLNOIroZg8ZKbFXJvZwwvNyX51Tcn7XrIFbFk9VD47LI6CaGXZkdPb2OB9U9ws2hSYc9f33mh/K704+vImY0EIKGapzRPunqxKKtsmUenHvahIRSIcXw=
