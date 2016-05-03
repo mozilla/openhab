@@ -1,10 +1,38 @@
-# openHAB travis.yml
-branches:
-  only:
-    - master
+install:
+- wget http://www-us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+- tar xzf apache-maven-3.3.9-bin.tar.gz
+- curl -s -L https://github.com/mozilla/openhab-core/releases/latest | egrep -o /mozilla/openhab-core/releases/download/.*/m2repository.tar.gz
+  | wget --base=http://github.com/ -i -
+- tar xf m2repository.tar.gz -C $HOME/.m2/repository/
 
-language: java
-install: mvn -e install -DskipTests=true -Dmaven.javadoc.skip=true -B -V 
+before_script:
+- rm $HOME/.m2/settings.xml
+- export MAVEN_OPTS="-Dmaven.artifact.threads=3 -Xmx2469m -XX:MaxPermSize=512m"
+
+script:
+- MAVEN_SKIP_RC=true apache-maven-3.3.9/bin/mvn install -fae -B 2>&1 | ./filter.py
+
+sudo: required
+
+dist: trusty
+
+cache:
+  directories:
+  - $HOME/.m2
 
 jdk:
-  - oraclejdk8
+- openjdk8
+
+before_deploy:
+- tar zcfv $TRAVIS_BUILD_DIR/m2repository.tar.gz -C $HOME/.m2/repository . 2>&1 | $TRAVIS_BUILD_DIR/filter.py
+
+deploy:
+  provider: releases
+  api_key:
+    secure: J2I7v3OnbMpcb62kAAGy2E0EVVrzSCb1enXlRd4l4UZFm6t/hjajunerZAhg1fYCiBZB2fSeFLJGy115DosoOAvikxNupA85Gz2YwpLWq70a9a2XfU4SNeTr6eXJXWes3LiE+yjUEhVQd0NpHkH3LkXo74OUtL4d25VLop3xLFtNXFE7UcZUuXdJG/V5lU0kkBQYKldEMWj1d5QxK4q0vbw/GC+xBOmM9J7kSVJAVK6fHv4IwxncP5srwfB0WWER4yk16nq6AWVQ+qzeaYCOrfbI9urVJs4jeY/qhV1KWKxGjfJq7QpfvpYR1Cig9cwd+pQ2jQiZg0cEkjijQwp+prkGsIZz/N4b2eDjVsuVZ/aPYUwXOASCFMFe7RmncA/8Q2dgbt/LNf7K//vHt83EaQMeoiOStuF6M+CXlYN7dsDB2qAaBSIP0V3wad0fSJQr8upgNYVH8Q/Rqku1T9J4aw5npyDGmxsSbJZdl+Ik+YyxmGkS5WkUAuuEJVp8RRoFlQxONp4ANCjj+mwI48CXnlTsTVzkGIeMGGy6BQjrYgcey+yU2SpTS98hwzGlWbymnA/wU+rWaNEf/UJu5OFZfef+KZAVA98eZe824XeCF3D8ibu/WhlCmZ/MZecL1VP2Aeq4mr/KOmMcseboAvL30b6e6BtTRECEB5b0CySM1E0=
+  file: m2repository.tar.gz
+  skip_cleanup: true
+  on:
+    repo: mozilla/openhab
+    branch: vaani
+    tags: true 
