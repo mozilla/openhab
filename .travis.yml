@@ -10,7 +10,7 @@ before_script:
 - export MAVEN_OPTS="-Dmaven.artifact.threads=3 -Xmx2469m -XX:MaxPermSize=512m"
 
 script:
-- MAVEN_SKIP_RC=true apache-maven-3.3.9/bin/mvn install -fae -B 2>&1 | ./filter.py
+- MAVEN_SKIP_RC=true apache-maven-3.3.9/bin/mvn install -fae -B 2>&1 | ./filter.py ; test ${PIPESTATUS[0]} -eq 0
 
 sudo: required
 
